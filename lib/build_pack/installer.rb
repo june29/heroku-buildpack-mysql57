@@ -74,7 +74,7 @@ module BuildPack
 
       def cleanup
         Logger.log_header("Cleaning up")
-        FileUtils.remove_dir(@mysql_path)
+        #FileUtils.remove_dir(@mysql_path)
       end
 
       def fail_install
