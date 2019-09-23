@@ -66,6 +66,9 @@ module BuildPack
         FileUtils.chmod("u=wrx", mysqldump_binary)
         FileUtils.mv(mysqldump_binary, @bin_path)
 
+        Logger.log_header("Listing available MySQL binaries")
+        Logger.log(Dir.glob("#{@mysql_binaries}/*"))
+
         Logger.log_header("Install and move mysql binary")
         mysql_binary = Dir.glob("#{@mysql_binaries}/mysql")
         FileUtils.chmod("u=wrx", mysql_binary)
