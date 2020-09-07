@@ -58,21 +58,12 @@ module BuildPack
         Logger.log_header("Listing available MySQL files")
         Logger.log(Dir.glob("#{@mysql_path}/**/*"))
 
-        # TODO: Doing a glob for some reason causes issues on heroku-16,
-        #       erroring out as it can't find the files to chmod and mv.
-        #       Specifying `mysqldump` specifically for now. Otherwise use:
-        # ```
-        # binaries = Dir.glob("#{@mysql_binaries}/*")
-        # ```
-        Logger.log_header("Install and move mysqldump binary")
-        mysqldump_binary = Dir.glob("#{@mysql_binaries}/mysqldump")
-        FileUtils.chmod("u=wrx", mysqldump_binary)
-        FileUtils.mv(mysqldump_binary, @bin_path)
-
-        Logger.log_header("Install and move mysql binary")
-        mysql_binary = Dir.glob("#{@mysql_binaries}/mysql")
-        FileUtils.chmod("u=wrx", mysql_binary)
-        FileUtils.mv(mysql_binary, @bin_path)
+        Logger.log_header("Install and move binaries")
+        binaries = Dir.glob("#{@mysql_binaries}/*")
+        binaries.each do |binary|
+          FileUtils.chmod("u=wrx", binary)
+          FileUtils.mv(binary, @bin_path)
+        end
       end
 
       def cleanup
