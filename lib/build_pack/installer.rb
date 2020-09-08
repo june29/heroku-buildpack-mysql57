@@ -56,11 +56,13 @@ module BuildPack
 
       def fix_perms_and_mv_binaries
         Logger.log_header("Listing available MySQL files")
-        Logger.log(Dir.glob("#{@mysql_path}/**/*"))
+        binaries = Dir.glob("#{@mysql_binaries}/*")
+        Logger.log(binaries)
 
         Logger.log_header("Install and move binaries")
-        binaries = Dir.glob("#{@mysql_binaries}/*")
         binaries.each do |binary|
+          next if File.symlink?(binary)
+
           FileUtils.chmod("u=wrx", binary)
           FileUtils.mv(binary, @bin_path)
         end
